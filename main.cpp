@@ -7,6 +7,10 @@
 #include <string>
 #include "heap.h"
 using namespace std;
+struct Frame { // for the uses to help stop std and won't affect the
+    int node;
+    string code;
+};
 
 // Global arrays for node information
 const int MAX_NODES = 64;
@@ -70,6 +74,7 @@ void buildFrequencyTable(int freq[], const string& filename) {
 
     cout << "Frequency table built successfully.\n";
 }
+//will soon fix this
 
 // Step 2: Create leaf nodes for each character
 int createLeafNodes(int freq[]) {
@@ -86,28 +91,81 @@ int createLeafNodes(int freq[]) {
     cout << "Created " << nextFree << " leaf nodes.\n";
     return nextFree;
 }
+//will soon fix this
 
 // Step 3: Build the encoding tree using heap operations
 int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
+    if (nextFree == 0) return -1;
+    if (nextFree == 1) return 0;
+    MinHeap heap;
     // 2. Push all leaf node indices into the heap.
+    for (int i = 0; i < nextFree; i++) {
+        heap.push(i, weightArr);//this adds everything to the heap
+    }
+    //int parentIdx = nextFree; //Creates a new parent
     // 3. While the heap size is greater than 1:
-    //    - Pop two smallest nodes
-    //    - Create a new parent node with combined weight
+    while (heap.size > 1) {
+        //    - Pop two smallest nodes
+        int leftChild = heap.pop(weightArr);
+        int rightChild = heap.pop(weightArr);
+
+        int parentIdx = nextFree; //Creates a new parent
+        //    - Create a new parent node with combined weight
+        weightArr[parentIdx] = weightArr[leftChild] + weightArr[rightChild];
     //    - Set left/right pointers
-    //    - Push new parent index back into the heap
+        leftArr[parentIdx] = leftChild;
+        rightArr[parentIdx] = rightChild;
+        //    - Push new parent index back into the heap
+        charArr[parentIdx] = '\0';
+        nextFree++;
+        heap.push(parentIdx, weightArr);
+}
     // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
+    return heap.pop(weightArr); // fixed
 }
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
     // TODO:
     // Use stack<pair<int, string>> to simulate DFS traversal.
-    // Left edge adds '0', right edge adds '1'.
+    if (root < 0) {
+        return;
+    }// checks if empty
+    //stack<pair<int, string>> s; //making new stack
+    stack<int> nodeStack;
+    stack<string> codeStack;
+    stack<Frame> s;
+    s.push({root, ""});//supposed to look at the string
+
+    //will go when the stack is empty
+    while (!s.empty()) {
+        //pair<int, string> current = s.top();
+        auto [nodeIdx, code] = s.top();
+        s.pop();
+        //int nodeIdx = current.first;// go through nodes
+        //string code = current.second;
+        //checks if it has chidlren or not then if not it's a leaf node
+        if (leftArr[nodeIdx] == -1 && rightArr[nodeIdx] == -1) {
+            int charIdx = charArr[nodeIdx] - 'a';
+            if ( 0 <= charIdx && charIdx < 26) {
+                codes[charIdx] = code.empty() ? "0" : code;
+            }
+            //codes[charIdx] = code;
+        }else{
+            // Left edge adds '0', right edge adds '1'.
+         if (rightArr[nodeIdx] != -1) {
+             s.push({rightArr[nodeIdx], code + "1"});// when it is on right it will add one
+         }
+            if (leftArr[nodeIdx] != -1) {
+             s.push({leftArr[nodeIdx], code + "0"});// when it is on left it will add zero
+            }
+         }
+        }
+    }
     // Record code when a leaf node is reached.
-}
+//will soon fix this
 
 // Step 5: Print table and encoded message
 void encodeMessage(const string& filename, string codes[]) {
