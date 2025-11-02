@@ -14,7 +14,7 @@ struct MinHeap {
 
     MinHeap() { size = 0; }
 
-    //will soon fix this
+    //this will help with the min heap and it running properly
     void push(int idx, int weightArr[]) {
         // TODO: insert index at end of heap, restore order using upheap()
         // this will help place the new index at the end of this array
@@ -27,7 +27,6 @@ struct MinHeap {
         //will restore the heap when it is moving elements this will make sure the smallest number is fixed properly
         upheap(size-1, weightArr);
         //This will incremnet the size after it is put
-        //size++;
     }
 
     //will soon fix this
@@ -59,7 +58,6 @@ struct MinHeap {
             //then we will have to compare with data from the position and parents
             //then with the weight we go from there
             if (weightArr[data[pos]] < weightArr[data[parent]]) {
-                //std::swap(data[pos], data[parent]);
                 int tmp = data[pos]; data[pos] = data[parent]; data[parent] = tmp;// will not use std as per requirment
                 pos = parent;
                 //swaps the index if the child is smaller
@@ -70,7 +68,6 @@ struct MinHeap {
         }
     }
 
-    //will soon fix this
 
     void downheap(int pos, int weightArr[]) {
         // TODO: swap parent downward while larger than any child
@@ -87,7 +84,6 @@ struct MinHeap {
                 smallest = rightChild;
             }
             if (smallest == pos) return;
-            //std::swap(data[pos], data[smallest]);
             int temp = data[pos]; data[pos] = data[smallest]; data[smallest] = temp;
             pos = smallest;
         }

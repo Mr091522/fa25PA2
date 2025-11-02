@@ -7,7 +7,7 @@
 #include <string>
 #include "heap.h"
 using namespace std;
-struct Frame { // for the uses to help stop std and won't affect the
+struct Frame {
     int node;
     string code;
 };
@@ -74,7 +74,7 @@ void buildFrequencyTable(int freq[], const string& filename) {
 
     cout << "Frequency table built successfully.\n";
 }
-//will soon fix this
+
 
 // Step 2: Create leaf nodes for each character
 int createLeafNodes(int freq[]) {
@@ -97,8 +97,8 @@ int createLeafNodes(int freq[]) {
 int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
-    if (nextFree == 0) return -1;
-    if (nextFree == 1) return 0;
+    if (nextFree == 0) return -1; //will help keep the input empty
+    if (nextFree == 1) return 0; // this will make he 1 leaf a root
     MinHeap heap;
     // 2. Push all leaf node indices into the heap.
     for (int i = 0; i < nextFree; i++) {
@@ -133,7 +133,6 @@ void generateCodes(int root, string codes[]) {
     if (root < 0) {
         return;
     }// checks if empty
-    //stack<pair<int, string>> s; //making new stack
     stack<int> nodeStack;
     stack<string> codeStack;
     stack<Frame> s;
@@ -144,15 +143,12 @@ void generateCodes(int root, string codes[]) {
         //pair<int, string> current = s.top();
         auto [nodeIdx, code] = s.top();
         s.pop();
-        //int nodeIdx = current.first;// go through nodes
-        //string code = current.second;
-        //checks if it has chidlren or not then if not it's a leaf node
+
         if (leftArr[nodeIdx] == -1 && rightArr[nodeIdx] == -1) {
             int charIdx = charArr[nodeIdx] - 'a';
             if ( 0 <= charIdx && charIdx < 26) {
                 codes[charIdx] = code.empty() ? "0" : code;
             }
-            //codes[charIdx] = code;
         }else{
             // Left edge adds '0', right edge adds '1'.
          if (rightArr[nodeIdx] != -1) {
@@ -165,7 +161,6 @@ void generateCodes(int root, string codes[]) {
         }
     }
     // Record code when a leaf node is reached.
-//will soon fix this
 
 // Step 5: Print table and encoded message
 void encodeMessage(const string& filename, string codes[]) {
