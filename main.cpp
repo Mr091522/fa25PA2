@@ -91,7 +91,6 @@ int createLeafNodes(int freq[]) {
     cout << "Created " << nextFree << " leaf nodes.\n";
     return nextFree;
 }
-//will soon fix this
 
 // Step 3: Build the encoding tree using heap operations
 int buildEncodingTree(int nextFree) {

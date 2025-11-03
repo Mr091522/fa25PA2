@@ -29,7 +29,6 @@ struct MinHeap {
         //This will incremnet the size after it is put
     }
 
-    //will soon fix this
     int pop(int weightArr[]) {
         // TODO: remove and return smallest index
         // Replace root with last element, then call downheap()
@@ -48,7 +47,6 @@ struct MinHeap {
             return minIndx;
     }
 
-    //will soon fix this
     void upheap(int pos, int weightArr[]) {
         // TODO: swap child upward while smaller than parent
         //will continue moving up till the correct root is found
